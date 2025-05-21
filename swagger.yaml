@@ -1,13 +1,11 @@
 openapi: 3.0.1
 info:
   title: Matematês DOCS
-  description: ''
+  description: 'Documentation of Matematês API, a web illustrated dictionary.'
   version: 1.0.0
 tags:
   - name: entry
     description: All about Math-related data
-  - name: term
-    description: Terms that compose an entry
   - name: definition
     description: Synthesis of knowledge
   - name: image
