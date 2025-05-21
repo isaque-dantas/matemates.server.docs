@@ -355,7 +355,7 @@ paths:
       deprecated: false
       description: ''
       tags:
-        - entry
+        - image
       parameters:
         - name: id
           in: path
@@ -429,7 +429,7 @@ paths:
       deprecated: false
       description: ''
       tags:
-        - entry
+        - image
       parameters:
         - name: id
           in: path
