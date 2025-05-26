@@ -45,7 +45,7 @@ paths:
               required:
                 - email
                 - password
-            examples: {}
+            examples: { }
       responses:
         '200':
           description: ''
@@ -64,8 +64,25 @@ paths:
               example:
                 refresh: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0Nzk0NjkzNCwiaWF0IjoxNzQ3ODYwNTM0LCJqdGkiOiJhNmJjMDZmYTI0ZjM0ZjUxODQ1NmRkMTYwN2Y4ZWFhMCIsInVzZXJfaWQiOjF9.U9TgK0GJDzGzocoRHBZI0uN64c9bmvLegD1HGWcFtkA
                 access: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3ODgyMTM0LCJpYXQiOjE3NDc4NjA1MzQsImp0aSI6IjM4NmJhM2U4MjliYzQ4OTg5OTBjNTY4MzI3MzEwYmVkIiwidXNlcl9pZCI6MX0.gL0QmrmhX51_GuXcEGXOqPF-0IApOnN2UUlAH3m7oGM
-          headers: {}
-      security: []
+          headers: { }
+        '401':
+          description: When e-mail or password are invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  refresh:
+                    type: string
+                  access:
+                    type: string
+                required:
+                  - access
+                  - refresh
+              example:
+                detail: No active account found with the given credentials
+          headers: { }
+      security: [ ]
   /token/refresh:
     post:
       summary: Get credentials token using refresh
@@ -105,8 +122,24 @@ paths:
                     type: string
               example:
                 access: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3ODgyMjgwLCJpYXQiOjE3NDc4NjA2NTcsImp0aSI6IjgxMDgwODZkYjZiNTRmZTdhZDdhNmM4MDdjN2UyMzk5IiwidXNlcl9pZCI6MX0.jq-AFbywefSsNJgNtDVHctyftdpqJ7z7v31ng4OixFE
-          headers: {}
-      security: []
+        '401':
+          description: When refresh token is invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  refresh:
+                    type: string
+                  access:
+                    type: string
+                required:
+                  - access
+                  - refresh
+              example:
+                detail: No active account found with the given credentials
+          headers: { }
+      security: [ ]
   /users:
     get:
       summary: Find user based on credentials
@@ -133,8 +166,10 @@ paths:
                 name: Common User
                 email: common-user@email.com
                 username: common-user
-          headers: {}
-      security: []
+        '401':
+          description: ''
+          headers: { }
+      security: [ ]
     post:
       summary: Register a new user
       deprecated: false
@@ -154,12 +189,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/User'
-            example:
-              name: Common User
-              email: common-user@email.com
-              password: pass
-              username: common-user
-              profile_image_base64: data:image/jpeg;base64,/9j/4AAQSkZJRgABAgAAZABkAAD/7AA...
       responses:
         '201':
           description: ''
@@ -167,16 +196,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-          headers: {}
+          headers: { }
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
-                properties: {}
-          headers: {}
-      security: []
+                properties: { }
+          headers: { }
+      security: [ ]
     put:
       summary: Update profile
       deprecated: false
@@ -196,22 +225,25 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/User'
-            examples: {}
+            examples: { }
       responses:
         '204':
           description: ''
-          headers: {}
+          headers: { }
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
-                properties: {}
-          headers: {}
-      security: []
+                properties: { }
+          headers: { }
+        '401':
+          description: ''
+          headers: { }
+      security: [ ]
     delete:
-      summary: Delete user accout
+      summary: Delete user account
       deprecated: false
       description: ''
       tags:
@@ -227,16 +259,19 @@ paths:
       responses:
         '204':
           description: ''
-          headers: {}
-        '400':
+          headers: { }
+        '404':
           description: ''
           content:
             application/json:
               schema:
                 type: object
-                properties: {}
-          headers: {}
-      security: []
+                properties: { }
+          headers: { }
+        '401':
+          description: ''
+          headers: { }
+      security: [ ]
   /users/profile_image:
     get:
       summary: Find profile image
@@ -263,8 +298,11 @@ paths:
                 name: Common User
                 email: common-user@email.com
                 username: common-user
-          headers: {}
-      security: []
+          headers: { }
+        '401':
+          description: ''
+          headers: { }
+      security: [ ]
     patch:
       summary: Update user profile image
       deprecated: false
@@ -287,20 +325,23 @@ paths:
               properties:
                 profile_image_base64:
                   type: string
-            examples: {}
+            examples: { }
       responses:
         '204':
           description: ''
-          headers: {}
+          headers: { }
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
-                properties: {}
-          headers: {}
-      security: []
+                properties: { }
+          headers: { }
+        '401':
+          description: ''
+          headers: { }
+      security: [ ]
   /users/turn-admin:
     post:
       summary: Turn user admin
@@ -331,22 +372,28 @@ paths:
                   "email": "common-user@email.com",
               }
       responses:
-        '201':
+        '200':
           description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-          headers: {}
+          headers: { }
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
-                properties: {}
-          headers: {}
-      security: []
+                properties: { }
+          headers: { }
+        '401':
+          description: ''
+          headers: { }
+        '403':
+          description: ''
+          headers: { }
+      security: [ ]
   /image/{id}:
     get:
       summary: Find image by ID
@@ -375,11 +422,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Image'
-          headers: {}
+          headers: { }
+        '403':
+          description: 'When entry is not validated yet'
+          headers: { }
         '404':
           description: ''
-          headers: {}
-      security: []
+          headers: { }
+      security: [ ]
     put:
       summary: Update existing image
       deprecated: false
@@ -405,23 +455,26 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ImageToSend'
-            examples: {}
+            examples: { }
       responses:
         '204':
           description: ''
-          headers: {}
+          headers: { }
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
-                properties: {}
-          headers: {}
+                properties: { }
+          headers: { }
+        '403':
+          description: ''
+          headers: { }
         '404':
           description: ''
-          headers: {}
-      security: []
+          headers: { }
+      security: [ ]
     delete:
       summary: Delete image
       deprecated: false
@@ -445,11 +498,14 @@ paths:
       responses:
         '204':
           description: ''
-          headers: {}
+          headers: { }
+        '403':
+          description: ''
+          headers: { }
         '404':
           description: ''
-          headers: {}
-      security: []
+          headers: { }
+      security: [ ]
   /image/{id}/blob_file:
     get:
       summary: Get image blob file by ID
@@ -478,11 +534,14 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/Image'
-          headers: {}
+          headers: { }
+        '403':
+          description: ''
+          headers: { }
         '404':
           description: ''
-          headers: {}
-      security: []
+          headers: { }
+      security: [ ]
   /image:
     post:
       summary: Add new image
@@ -503,7 +562,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ImageToSend'
-            examples: {}
+            examples: { }
       responses:
         '201':
           description: ''
@@ -511,16 +570,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Image'
-          headers: {}
+          headers: { }
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
-                properties: {}
-          headers: {}
-      security: []
+                properties: { }
+          headers: { }
+        '403':
+          description: ''
+          headers: { }
+      security: [ ]
   /definition/{id}:
     get:
       summary: Find definition by ID
@@ -549,11 +611,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Definition'
-          headers: {}
+          headers: { }
+        '403':
+          description: 'When entry is not validated yet'
+          headers: { }
         '404':
           description: ''
-          headers: {}
-      security: []
+          headers: { }
+      security: [ ]
     put:
       summary: Update existing definition
       deprecated: false
@@ -579,23 +644,26 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/DefinitionToSend'
-            examples: {}
+            examples: { }
       responses:
         '204':
           description: ''
-          headers: {}
+          headers: { }
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
-                properties: {}
-          headers: {}
+                properties: { }
+          headers: { }
+        '403':
+          description: ''
+          headers: { }
         '404':
           description: ''
-          headers: {}
-      security: []
+          headers: { }
+      security: [ ]
     delete:
       summary: Delete definition
       deprecated: false
@@ -619,19 +687,14 @@ paths:
       responses:
         '204':
           description: ''
-          headers: {}
-        '400':
+          headers: { }
+        '403':
           description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                properties: {}
-          headers: {}
+          headers: { }
         '404':
           description: ''
-          headers: {}
-      security: []
+          headers: { }
+      security: [ ]
   /definition:
     post:
       summary: Add new definition
@@ -652,7 +715,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/DefinitionToSend'
-            examples: {}
+            examples: { }
       responses:
         '201':
           description: ''
@@ -660,16 +723,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Definition'
-          headers: {}
+          headers: { }
+        '403':
+          description: ''
+          headers: { }
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
-                properties: {}
-          headers: {}
-      security: []
+                properties: { }
+          headers: { }
+      security: [ ]
   /question/{id}:
     get:
       summary: Find question by ID
@@ -698,11 +764,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Question'
-          headers: {}
+          headers: { }
+        '403':
+          description: 'When entry is not validated yet'
+          headers: { }
         '404':
           description: ''
-          headers: {}
-      security: []
+          headers: { }
+      security: [ ]
     put:
       summary: Update existing Question
       deprecated: false
@@ -728,23 +797,26 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Question'
-            examples: {}
+            examples: { }
       responses:
         '204':
           description: ''
-          headers: {}
+          headers: { }
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
-                properties: {}
-          headers: {}
+                properties: { }
+          headers: { }
+        '403':
+          description: ''
+          headers: { }
         '404':
           description: ''
-          headers: {}
-      security: []
+          headers: { }
+      security: [ ]
     delete:
       summary: Delete question
       deprecated: false
@@ -768,11 +840,14 @@ paths:
       responses:
         '204':
           description: ''
-          headers: {}
+          headers: { }
+        '403':
+          description: ''
+          headers: { }
         '404':
           description: ''
-          headers: {}
-      security: []
+          headers: { }
+      security: [ ]
   /question:
     post:
       summary: Add new question
@@ -792,25 +867,28 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Question'
-            examples: {}
+              $ref: '#/components/schemas/QuestionToSend'
+            examples: { }
       responses:
         '201':
           description: ''
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Question'
-          headers: {}
+                $ref: '#/components/schemas/QuestionToSend'
+          headers: { }
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
-                properties: {}
-          headers: {}
-      security: []
+                properties: { }
+          headers: { }
+        '403':
+          description: ''
+          headers: { }
+      security: [ ]
   /knowledge_area/{id}:
     get:
       summary: Find knowledge area by ID
@@ -839,11 +917,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/KnowledgeArea'
-          headers: {}
+          headers: { }
         '404':
           description: ''
-          headers: {}
-      security: []
+          headers: { }
+      security: [ ]
     put:
       summary: Update existing knowledge area
       deprecated: false
@@ -869,23 +947,26 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Question'
-            examples: {}
+            examples: { }
       responses:
         '204':
           description: ''
-          headers: {}
+          headers: { }
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
-                properties: {}
-          headers: {}
+                properties: { }
+          headers: { }
+        '403':
+          description: ''
+          headers: { }
         '404':
           description: ''
-          headers: {}
-      security: []
+          headers: { }
+      security: [ ]
     delete:
       summary: Delete knowledge area
       deprecated: false
@@ -909,11 +990,14 @@ paths:
       responses:
         '204':
           description: ''
-          headers: {}
+          headers: { }
+        '403':
+          description: ''
+          headers: { }
         '404':
           description: ''
-          headers: {}
-      security: []
+          headers: { }
+      security: [ ]
   /knowledge_area:
     get:
       summary: Find knowledge areas
@@ -938,8 +1022,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/KnowledgeArea'
-          headers: {}
-      security: []
+          headers: { }
+      security: [ ]
     post:
       summary: Add new knowledge area
       deprecated: false
@@ -958,25 +1042,28 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Question'
-            examples: {}
+              $ref: '#/components/schemas/KnowledgeArea'
+            examples: { }
       responses:
         '201':
           description: ''
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Question'
-          headers: {}
+                $ref: '#/components/schemas/KnowledgeArea'
+          headers: { }
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
-                properties: {}
-          headers: {}
-      security: []
+                properties: { }
+          headers: { }
+        '403':
+          description: ''
+          headers: { }
+      security: [ ]
   /entry:
     get:
       summary: Find entries
@@ -993,7 +1080,7 @@ paths:
           schema:
             type: string
       responses:
-        '201':
+        '200':
           description: ''
           content:
             application/json:
@@ -1001,16 +1088,11 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Entry'
-          headers: {}
-        '400':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                properties: {}
-          headers: {}
-      security: []
+          headers: { }
+        '403':
+          description: 'When entry is not validated yet'
+          headers: { }
+      security: [ ]
     post:
       summary: Add new entry
       deprecated: false
@@ -1030,7 +1112,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/EntryToSend'
-            examples: {}
       responses:
         '201':
           description: ''
@@ -1038,16 +1119,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Entry'
-          headers: {}
+          headers: { }
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
-                properties: {}
-          headers: {}
-      security: []
+                properties: { }
+                example:
+                  images: [
+                    { "base64_image": "A imagem deve estar no formato base64." },
+                  ]
+          headers: { }
+        '403':
+          description: ''
+          headers: { }
+      security: [ ]
   /entry/{id}/validate:
     patch:
       summary: Validate entry
@@ -1072,19 +1160,22 @@ paths:
       responses:
         '204':
           description: ''
-          headers: {}
+          headers: { }
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
-                properties: {}
-          headers: {}
+                properties: { }
+          headers: { }
+        '403':
+          description: ''
+          headers: { }
         '404':
           description: ''
-          headers: {}
-      security: []
+          headers: { }
+      security: [ ]
   /entry/{id}:
     get:
       summary: Find entry by ID
@@ -1113,11 +1204,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Entry'
-          headers: {}
+          headers: { }
+        '403':
+          description: 'When entry is not validated yet'
+          headers: { }
         '404':
           description: ''
-          headers: {}
-      security: []
+          headers: { }
+      security: [ ]
     patch:
       summary: Update existing entry
       deprecated: false
@@ -1150,23 +1244,26 @@ paths:
                   type: string
                 main_term_gender:
                   type: string
-            examples: {}
+            examples: { }
       responses:
         '204':
           description: ''
-          headers: {}
+          headers: { }
         '400':
           description: ''
           content:
             application/json:
               schema:
                 type: object
-                properties: {}
-          headers: {}
+                properties: { }
+          headers: { }
+        '403':
+          description: ''
+          headers: { }
         '404':
           description: ''
-          headers: {}
-      security: []
+          headers: { }
+      security: [ ]
     delete:
       summary: Delete entry
       deprecated: false
@@ -1190,16 +1287,19 @@ paths:
       responses:
         '204':
           description: ''
-          headers: {}
+          headers: { }
+        '403':
+          description: ''
+          headers: { }
         '404':
           description: ''
           content:
             application/json:
               schema:
                 type: object
-                properties: {}
-          headers: {}
-      security: []
+                properties: { }
+          headers: { }
+      security: [ ]
   /history:
     get:
       summary: View History
@@ -1232,8 +1332,11 @@ paths:
                   required:
                     - access_moment
                     - entry
-          headers: {}
-      security: []
+          headers: { }
+        '401':
+          description: ''
+          headers: { }
+      security: [ ]
   /history/most_accessed:
     get:
       summary: View Most Accessed
@@ -1266,8 +1369,11 @@ paths:
                   required:
                     - access_moment
                     - entry
-          headers: {}
-      security: []
+          headers: { }
+        '401':
+          description: ''
+          headers: { }
+      security: [ ]
 components:
   schemas:
     User:
@@ -1275,14 +1381,19 @@ components:
       properties:
         name:
           type: string
+          example: Common User
         email:
           type: string
+          example: common-user@email.com
         password:
           type: string
+          example: password
         username:
           type: string
+          example: common-user
         profile_image_base64:
           type: string
+          example: data:image/jpeg;base64,/9j/4AAQSkZJRgABAgAAZABkAAD/7AA...
       required:
         - name
         - email
@@ -1294,8 +1405,13 @@ components:
         id:
           type: integer
           description: ID
+          example: 34
+        content:
+          type: string
+          example: geometria
         subject:
           type: string
+          example: física
         entries:
           type: array
           items:
@@ -1303,14 +1419,17 @@ components:
           nullable: true
       required:
         - id
+        - content
         - subject
     DefinitionToSend:
       type: object
       properties:
         content:
           type: string
+          example: Ângulo com valor de 90°. Semirretas que formam um ângulo de 90º são chamadas de perpendiculares.
         knowledge_area__content:
           type: string
+          example: geometria
         entry:
           type: integer
           nullable: true
@@ -1322,8 +1441,10 @@ components:
       properties:
         id:
           type: integer
+          example: 2
         content:
           type: string
+          example: Ângulo com valor de 90°. Semirretas que formam um ângulo de 90º são chamadas de perpendiculares.
         knowledge_area:
           $ref: '#/components/schemas/KnowledgeArea'
       required:
@@ -1336,11 +1457,14 @@ components:
         id:
           type: integer
           description: ID
+          example: 5
         caption:
           type: string
           description: name
+          example: Ângulo reto na imagem
         url:
           type: string
+          example: api.matemates.com/api/v1/image/5/blob_file
       required:
         - url
         - id
@@ -1351,28 +1475,52 @@ components:
         id:
           type: integer
           description: ID
+          example: 5
         caption:
           type: string
+          example: Ângulo reto na imagem
         base64_image:
           type: string
+          example: data:image/jpeg;base64,/9j/4AAQSkZJRgABAgAAZABkAAD/7AA...
         entry:
           type: integer
           nullable: true
+          example: 27
       required:
         - base64_image
+    QuestionToSend:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID
+          example: 3
+        statement:
+          type: string
+          example: Quantos ângulos retos tem um quadrado?
+        answer:
+          type: string
+          example: Todos os ângulos internos de um quadrado são retos. Ou seja, há quatro deles.
+        entry:
+          type: integer
+          nullable: true
+          example: 5
+      required:
+        - statement
+        - answer
     Question:
       type: object
       properties:
         id:
           type: integer
           description: ID
+          example: 3
         statement:
           type: string
+          example: Quantos ângulos retos tem um quadrado?
         answer:
           type: string
-        entry:
-          type: integer
-          nullable: true
+          example: Todos os ângulos internos de um quadrado são retos. Ou seja, há quatro deles.
       required:
         - statement
         - answer
@@ -1382,18 +1530,24 @@ components:
         id:
           type: integer
           description: ID
+          example: 82
         content:
           type: string
+          example: ângulo
         gender:
           type: string
+          example: M
         grammatical_category:
           type: string
+          example: substantivo
         is_main_term:
           type: boolean
+          example: true
         syllables:
           type: array
           items:
             type: string
+            example: ân
       required:
         - content
         - gender
@@ -1406,12 +1560,16 @@ components:
       properties:
         id:
           type: integer
+          example: 14
         content:
           type: string
+          example: ângulo reto
         main_term_gender:
           type: string
+          example: M
         is_validated:
           type: boolean
+          example: false
         images:
           type: array
           items:
@@ -1443,10 +1601,13 @@ components:
       properties:
         content:
           type: string
+          example: "*ângulo* reto"
         main_term_gender:
           type: string
+          example: M
         main_term_grammatical_category:
           type: string
+          example: substantivo
         questions:
           type: array
           items:
@@ -1466,6 +1627,6 @@ components:
         - questions
         - images
         - definitions
-  securitySchemes: {}
-servers: []
-security: []
+  securitySchemes: { }
+servers: [ ]
+security: [ ]
