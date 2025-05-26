@@ -1089,9 +1089,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/Entry'
           headers: { }
-        '403':
-          description: 'When entry is not validated yet'
-          headers: { }
       security: [ ]
     post:
       summary: Add new entry
@@ -1447,6 +1444,14 @@ components:
           example: Ângulo com valor de 90°. Semirretas que formam um ângulo de 90º são chamadas de perpendiculares.
         knowledge_area:
           $ref: '#/components/schemas/KnowledgeArea'
+      example:
+        id: 2
+        content: Ângulo com valor de 90°. Semirretas que formam um ângulo de 90º são chamadas de perpendiculares.
+        knowledge_area:
+          id: 28
+          content: geometria
+          subject: física
+
       required:
         - content
         - knowledge_area
